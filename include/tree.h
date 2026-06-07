@@ -4,55 +4,28 @@
 
 #include <vector>
 
-class PermTree {
- private:
-    struct TreeNode {
-        char letter;
-        std::vector<TreeNode*> branches;
-        explicit TreeNode(char ch) : letter(ch) {}
+class PMTree {
+ public:
+    struct Node {
+        char sym;
+        std::vector<Node*> links;
+        explicit Node(char s) : sym(s) {}
     };
 
-    TreeNode* head;
-    std::vector<char> source;
+    Node* top;
+    std::vector<char> base;
 
-    void expand(TreeNode* node, std::vector<char> available) {
-        if (available.empty()) return;
-        for (size_t i = 0; i < available.size(); ++i) {
-            TreeNode* child = new TreeNode(available[i]);
-            node->branches.push_back(child);
-            std::vector<char> rest;
-            for (size_t j = 0; j < available.size(); ++j) {
-                if (j != i) rest.push_back(available[j]);
-            }
-            expand(child, rest);
-        }
-    }
+    explicit PMTree(const std::vector<char>& src);
+    ~PMTree();
 
-    void cleanup(TreeNode* node) {
-        if (!node) return;
-        for (TreeNode* child : node->branches) {
-            cleanup(child);
-        }
-        delete node;
-    }
-
- public:
-    explicit PermTree(const std::vector<char>& items) : source(items) {
-        head = new TreeNode(0);
-        expand(head, source);
-    }
-
-    ~PermTree() {
-        cleanup(head);
-    }
-
-    TreeNode* getRoot() const {
-        return head;
-    }
-
-    int getSize() const {
-        return source.size();
-    }
+ private:
+    Node* generate(const std::vector<char>& rest);
+    void destroy(Node* ptr);
 };
+
+std::vector<std::vector<char>> getAllPerms(PMTree& obj);
+std::vector<char> getPerm1(PMTree& obj, int pos);
+std::vector<char> getPerm2(PMTree& obj, int pos);
+size_t fact(int n);
 
 #endif  // INCLUDE_TREE_H_
