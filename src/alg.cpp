@@ -52,7 +52,8 @@ void PMTree::destroy(Node* ptr) {
 }
 
 static void traverse(PMTree::Node* cur, std::vector<char>& buf,
-                     std::vector<std::vector<char>>& out, int level, int limit) {
+                     std::vector<std::vector<char>>& out,
+                     int level, int limit) {
     if (level == limit) {
         out.push_back(buf);
         return;
